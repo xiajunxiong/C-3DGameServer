@@ -7,9 +7,12 @@
 #include <libs/date_time/src/gregorian/gregorian_types.cpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <hiredis.h>
+#include "GameWorld.h"
+#include <chrono>
+#include <vector>
 
 bool isRunning = false;
-
+std::vector<GameWorldObject*> worldObjects;
 void startServer() {
 	isRunning = true;
 	std::cout << "Starting the game server..." << std::endl;
@@ -23,7 +26,17 @@ void startGame() {
 
 }
 void runGameLoop() {
-	std::cout << "Running the game loop..." << std::endl;
+
+
+    using Clock = std::chrono::high_resolution_clock;
+    auto lastTime = Clock::now();
+    const auto currentTime = Clock::now();
+    const DeltaTime deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+    lastTime = currentTime;
+    for (auto obj : worldObjects)
+    {
+        obj->Update(deltaTime);
+    }
 }
 
 void runRedis() {
@@ -81,12 +94,31 @@ void test_boost_install() {
 
 }
 
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <conio.h>
+using namespace std;
+mutex mtx;
+void addMap() {
+    this_thread::sleep_for(chrono::seconds(3));
+
+    lock_guard<mutex> lock(mtx);
+    worldObjects.push_back(new Map());
+    cout << "地图已添加！" << endl;
+}
 
 int main() {
 	startServer();
 	startGame();
 	runRedis();
 	test_boost_install();
+
+
+    worldObjects.push_back(new Player());
+    worldObjects.push_back(new Enemy());
+    thread t(addMap);
+    t.detach();
 	while (isRunning)
 	{
 		runGameLoop();
