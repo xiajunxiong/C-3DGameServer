@@ -1,0 +1,55 @@
+# Visual Studio 缓存与用户配置
+.vs/
+*.vcxproj.user
+*.vcxproj.filters.user
+*.suo
+*.sln.docstates
+
+# 编译输出目录（所有 build 生成的文件夹）
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+build/
+cmake-build-*/
+
+# 编译产物
+*.exe
+*.dll
+*.o
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.tlog
+*.lastbuildstate
+*.log
+
+# C语言额外产物
+*.out
+*.a
+
+# 编辑器/系统临时文件
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+
+# boost库
+boost/
+boost_*/
+libs/
+libboost*
+**/boost/
+
+# Redis 相关文件（不上传）
+redis*
+Redis*
+*redis*.exe
+*redis*.conf
+*redis*.log
+dump.rdb
+appendonly.aof

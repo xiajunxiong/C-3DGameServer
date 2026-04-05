@@ -1,0 +1,101 @@
+﻿#include <iostream>
+#define BOOST_TIMER_ENABLE_DEPRECATED
+#include <boost/timer.hpp>
+#include <boost/progress.hpp>
+#include <libs/date_time/src/gregorian/greg_names.hpp>
+#include <libs/date_time/src/gregorian/greg_month.cpp>
+#include <libs/date_time/src/gregorian/gregorian_types.cpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <hiredis.h>
+
+bool isRunning = false;
+
+void startServer() {
+	isRunning = true;
+	std::cout << "Starting the game server..." << std::endl;
+}
+void stopServer() {
+	isRunning = false;
+	std::cout << "Stopping the game server..." << std::endl;
+}
+
+void startGame() {
+
+}
+void runGameLoop() {
+	std::cout << "Running the game loop..." << std::endl;
+}
+
+void runRedis() {
+    redisContext* ctx = redisConnect("127.0.0.1", 6379);
+
+    if (ctx == nullptr || ctx->err != 0)
+    {
+        std::cout << "❌ 连接失败：" << (ctx ? ctx->errstr : "未知错误") << std::endl;
+        if (ctx != nullptr)
+        {
+            redisFree(ctx);
+        }
+        return;
+    }
+    std::cout << "✅ Redis 连接成功！" << std::endl;
+
+    redisReply* reply = (redisReply*)redisCommand(ctx, "SET test hello");
+    if (reply == nullptr)
+    {
+        std::cout << "❌ SET 命令执行失败" << std::endl;
+        redisFree(ctx);
+        return;
+    }
+    freeReplyObject(reply);
+
+    reply = (redisReply*)redisCommand(ctx, "GET test");
+    if (reply != nullptr && reply->type == REDIS_REPLY_STRING)
+    {
+        std::cout << "✅ 读取结果：" << reply->str << std::endl;
+    }
+    else
+    {
+        std::cout << "❌ GET 命令执行失败 / 数据类型错误" << std::endl;
+    }
+    freeReplyObject(reply);
+
+    redisFree(ctx);
+    std::cout << "✅ Redis 操作完成" << std::endl;
+}
+
+void test_boost_install() {
+	boost::timer t;
+	boost::gregorian::date dt(1978, 12, 18);
+	assert(dt.year() == 1978);
+	assert(dt.day() == 18);
+	boost::gregorian::date::ymd_type ymd = dt.year_month_day();
+	std::cout << "\n" << ymd.year << "/" << ymd.month << "/" << ymd.day << " the day is "
+		<< dt.day_of_year() << " days of this year" << std::endl;
+
+	std::cout << boost::gregorian::to_iso_extended_string(dt) << std::endl;
+	std::cout << boost::gregorian::to_iso_string(dt) << std::endl;
+	std::cout << boost::gregorian::to_simple_string(dt) << std::endl << std::endl;
+	std::cout << t.elapsed() << "s" << std::endl;
+	system("pause");
+
+}
+
+
+int main() {
+	startServer();
+	startGame();
+	runRedis();
+	test_boost_install();
+	while (isRunning)
+	{
+		runGameLoop();
+	}
+
+	return 0;
+}
+
+
+
+
+
