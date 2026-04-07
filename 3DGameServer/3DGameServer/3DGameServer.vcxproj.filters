@@ -18,12 +18,24 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="GameWorldObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="GameWorld.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BoostService.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameWorldObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="GameWorld.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BoostService.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

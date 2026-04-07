@@ -10,6 +10,9 @@
 #include "GameWorld.h"
 #include <chrono>
 #include <vector>
+#include "GameWorldObject.h"
+#include "BoostService.h"
+#include <thread>
 
 bool isRunning = false;
 std::vector<GameWorldObject*> worldObjects;
@@ -20,6 +23,20 @@ void startServer() {
 void stopServer() {
 	isRunning = false;
 	std::cout << "Stopping the game server..." << std::endl;
+}
+void runGameServer() {
+    try
+    {
+        boost::asio::io_context io;
+        TcpServer server(io, 12345); // 监听端口 12345
+
+        std::cout << "异步TCP服务器已启动，端口 12345" << std::endl;
+        io.run();
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "异常: " << e.what() << std::endl;
+    }
 }
 
 void startGame() {
@@ -77,51 +94,66 @@ void runRedis() {
     std::cout << "✅ Redis 操作完成" << std::endl;
 }
 
-void test_boost_install() {
-	boost::timer t;
-	boost::gregorian::date dt(1978, 12, 18);
-	assert(dt.year() == 1978);
-	assert(dt.day() == 18);
-	boost::gregorian::date::ymd_type ymd = dt.year_month_day();
-	std::cout << "\n" << ymd.year << "/" << ymd.month << "/" << ymd.day << " the day is "
-		<< dt.day_of_year() << " days of this year" << std::endl;
+//void test_boost_install() {
+//	boost::timer t;
+//	boost::gregorian::date dt(1978, 12, 18);
+//	assert(dt.year() == 1978);
+//	assert(dt.day() == 18);
+//	boost::gregorian::date::ymd_type ymd = dt.year_month_day();
+//	std::cout << "\n" << ymd.year << "/" << ymd.month << "/" << ymd.day << " the day is "
+//		<< dt.day_of_year() << " days of this year" << std::endl;
+//
+//	std::cout << boost::gregorian::to_iso_extended_string(dt) << std::endl;
+//	std::cout << boost::gregorian::to_iso_string(dt) << std::endl;
+//	std::cout << boost::gregorian::to_simple_string(dt) << std::endl << std::endl;
+//	std::cout << t.elapsed() << "s" << std::endl;
+//	system("pause");
+//
+//}
 
-	std::cout << boost::gregorian::to_iso_extended_string(dt) << std::endl;
-	std::cout << boost::gregorian::to_iso_string(dt) << std::endl;
-	std::cout << boost::gregorian::to_simple_string(dt) << std::endl << std::endl;
-	std::cout << t.elapsed() << "s" << std::endl;
-	system("pause");
-
-}
-
-#include <thread>
 #include <mutex>
 #include <atomic>
 #include <conio.h>
 using namespace std;
 mutex mtx;
+GameWorld world;
 void addMap() {
     this_thread::sleep_for(chrono::seconds(3));
 
-    lock_guard<mutex> lock(mtx);
-    worldObjects.push_back(new Map());
-    cout << "地图已添加！" << endl;
+    //lock_guard<mutex> lock(mtx);
+    //worldObjects.push_back(new Map());
+    //cout << "地图已添加！" << endl;
+    world.Destroy("player_1001");
+    Player* p1 = new Player();
+    p1->objId = "player_1005";  // 像数据库ID
+    world.Add(p1);
 }
+
 
 int main() {
 	startServer();
 	startGame();
 	runRedis();
-	test_boost_install();
-
-
-    worldObjects.push_back(new Player());
-    worldObjects.push_back(new Enemy());
+	//test_boost_install();
+    
+    //Player* p1 = new Player();
+    //p1->objId = "player_1001";  // 像数据库ID
+    //world.Add(p1);
+    //Enemy* e1 = new Enemy();
+    //e1->objId = "enemy_2001";
+    //world.Add(e1);
+    Map* m1 = new Map();
+    m1->objId = "map_3001";
+    world.Add(m1);
     thread t(addMap);
     t.detach();
+
+	jthread serverThread(runGameServer);
+
 	while (isRunning)
 	{
-		runGameLoop();
+        world.UpdateAll(0.016f);
+		//runGameLoop();
 	}
 
 	return 0;
