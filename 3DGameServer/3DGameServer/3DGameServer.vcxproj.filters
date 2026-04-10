@@ -13,30 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="网络类">
+      <UniqueIdentifier>{0b89aaa7-9cd8-41d6-b11c-f79e0fb1b164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="游戏世界">
+      <UniqueIdentifier>{35642957-3d5f-42d5-8884-e6199b6d0e51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="工具">
+      <UniqueIdentifier>{624e058e-1e94-48b8-9e04-86d4271716d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="GameWorldObject.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="network\HttpsLoginServer.cpp">
+      <Filter>网络类</Filter>
     </ClCompile>
-    <ClCompile Include="GameWorld.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="network\BoostService.cpp">
+      <Filter>网络类</Filter>
     </ClCompile>
-    <ClCompile Include="BoostService.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="game\GameWorldObject.cpp">
+      <Filter>游戏世界</Filter>
+    </ClCompile>
+    <ClCompile Include="game\GameWorld.cpp">
+      <Filter>游戏世界</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\RedisProcess.cpp">
+      <Filter>工具</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameWorldObject.h">
+    <ClInclude Include="RedisProcess.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GameWorld.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="network\HttpsLoginServer.h">
+      <Filter>网络类</Filter>
     </ClInclude>
-    <ClInclude Include="BoostService.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="network\BoostService.h">
+      <Filter>网络类</Filter>
+    </ClInclude>
+    <ClInclude Include="game\GameWorldObject.h">
+      <Filter>游戏世界</Filter>
+    </ClInclude>
+    <ClInclude Include="game\GameWorld.h">
+      <Filter>游戏世界</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\RedisProcess.h">
+      <Filter>工具</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

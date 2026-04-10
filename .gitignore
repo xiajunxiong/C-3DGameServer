@@ -53,3 +53,14 @@ Redis*
 *redis*.log
 dump.rdb
 appendonly.aof
+
+# ======================
+# SSL 证书（屏蔽不上传）
+# ======================
+server.crt
+server.key
+*.crt
+*.key
+*.pem
+*.pfx
+*.p12

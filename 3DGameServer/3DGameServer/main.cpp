@@ -56,24 +56,29 @@ void runGameLoop() {
     }
 }
 
+#include "RedisProcess.h"
+
 void runRedis() {
+    RedisProcess::Start();
+    Sleep(500);
+
     redisContext* ctx = redisConnect("127.0.0.1", 6379);
 
     if (ctx == nullptr || ctx->err != 0)
     {
-        std::cout << "❌ 连接失败：" << (ctx ? ctx->errstr : "未知错误") << std::endl;
+        std::cout << "连接失败：" << (ctx ? ctx->errstr : "未知错误") << std::endl;
         if (ctx != nullptr)
         {
             redisFree(ctx);
         }
         return;
     }
-    std::cout << "✅ Redis 连接成功！" << std::endl;
+    std::cout << "Redis 连接成功！" << std::endl;
 
     redisReply* reply = (redisReply*)redisCommand(ctx, "SET test hello");
     if (reply == nullptr)
     {
-        std::cout << "❌ SET 命令执行失败" << std::endl;
+        std::cout << "SET 命令执行失败" << std::endl;
         redisFree(ctx);
         return;
     }
@@ -82,16 +87,16 @@ void runRedis() {
     reply = (redisReply*)redisCommand(ctx, "GET test");
     if (reply != nullptr && reply->type == REDIS_REPLY_STRING)
     {
-        std::cout << "✅ 读取结果：" << reply->str << std::endl;
+        std::cout << "读取结果：" << reply->str << std::endl;
     }
     else
     {
-        std::cout << "❌ GET 命令执行失败 / 数据类型错误" << std::endl;
+        std::cout << "GET 命令执行失败 / 数据类型错误" << std::endl;
     }
     freeReplyObject(reply);
 
     redisFree(ctx);
-    std::cout << "✅ Redis 操作完成" << std::endl;
+    std::cout << "Redis 操作完成" << std::endl;
 }
 
 //void test_boost_install() {
@@ -128,9 +133,15 @@ void addMap() {
     p1->objId = "player_1005";  // 像数据库ID
     world.Add(p1);
 }
+#include "HttpsLoginServer.h"
+#include <fstream>
 
 
 int main() {
+
+    HttpsLoginServer httpsServer;
+    thread httpsT(&HttpsLoginServer::Start, &httpsServer);
+    httpsT.detach();
 	startServer();
 	startGame();
 	runRedis();
@@ -150,12 +161,15 @@ int main() {
 
 	jthread serverThread(runGameServer);
 
-	while (isRunning)
-	{
-        world.UpdateAll(0.016f);
-		//runGameLoop();
-	}
+	//while (isRunning)
+	//{
+ //       world.UpdateAll(0.016f);
+	//	//runGameLoop();
+	//}
 
+
+
+    RedisProcess::Stop();
 	return 0;
 }
 

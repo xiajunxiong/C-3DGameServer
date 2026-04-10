@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{dba6f359-0cfe-4214-9ecd-9040b4f8c403}</ProjectGuid>
     <RootNamespace>My3DGameServer</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\插件_工具\redis\hiredis-1.3.0;D:\插件_工具\boost_1_88_0;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\插件_工具\redis\hiredis-1.3.0\Build\Release;D:\插件_工具\boost_1_88_0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\Tool;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\game;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\network;D:\插件_工具\CPP\OpenSSL-Win64\include;D:\插件_工具\CPP\cpp-httplib-master;D:\插件_工具\CPP\json-3.12.0\include;D:\插件_工具\redis\hiredis-1.3.0;D:\插件_工具\boost_1_88_0;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\lib;D:\插件_工具\redis\hiredis-1.3.0\Build\Release;D:\插件_工具\boost_1_88_0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -104,7 +104,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WIN32_WINNT=0x0A00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -113,7 +113,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\插件_工具\redis\hiredis-1.3.0\Build\Release;D:\插件_工具\boost_1_88_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hiredis.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hiredis.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,15 +131,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BoostService.cpp" />
-    <ClCompile Include="GameWorld.cpp" />
-    <ClCompile Include="GameWorldObject.cpp" />
+    <ClCompile Include="game\GameWorld.cpp" />
+    <ClCompile Include="game\GameWorldObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="network\BoostService.cpp" />
+    <ClCompile Include="network\HttpsLoginServer.cpp" />
+    <ClCompile Include="Tool\RedisProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BoostService.h" />
-    <ClInclude Include="GameWorld.h" />
-    <ClInclude Include="GameWorldObject.h" />
+    <ClInclude Include="game\GameWorld.h" />
+    <ClInclude Include="game\GameWorldObject.h" />
+    <ClInclude Include="network\BoostService.h" />
+    <ClInclude Include="network\HttpsLoginServer.h" />
+    <ClInclude Include="RedisProcess.h" />
+    <ClInclude Include="Tool\RedisProcess.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
