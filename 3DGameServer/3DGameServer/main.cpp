@@ -14,6 +14,8 @@
 #include "BoostService.h"
 #include <thread>
 
+
+
 bool isRunning = false;
 std::vector<GameWorldObject*> worldObjects;
 void startServer() {
@@ -135,9 +137,85 @@ void addMap() {
 }
 #include "HttpsLoginServer.h"
 #include <fstream>
+#include <pqxx/pqxx>
+#include <jwt-cpp/jwt.h>
 
 
 int main() {
+
+    // ======================
+    // 1. 正常生成正确的 Token（你可以忽略）
+    // ======================
+    auto real_token = jwt::create()
+        .set_issuer("test")
+        .set_type("JWT")
+        .set_payload_claim("uid", jwt::claim(std::to_string(123456)))
+        .sign(jwt::algorithm::hs256{ "my-secret-key" });
+
+    //std::cout << "正确 Token：\n" << real_token << "\n\n";
+
+    //// ======================
+    //// 2. 【关键】手动写一个 伪造/错误/篡改的 Token
+    //// ======================
+    //std::string fake_token =
+    //    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+    //    "eyJpc3MiOiJ0ZXN0IiwidWlkIjoiMTIzNDU2In0."
+    //    "THIS_IS_FAKE_SIGNATURE_123456789"; // 这里是伪造签名
+
+    //std::cout << "伪造 Token：\n" << fake_token << "\n\n";
+
+    try {
+        // 尝试解析 + 验证 伪造Token
+        auto decoded = jwt::decode(real_token);
+
+        auto verifier = jwt::verify()
+            .allow_algorithm(jwt::algorithm::hs256{ "my-secret-key" })
+            .with_issuer("test");
+
+        // 关键：验证伪造的token —— 一定会报错！
+        verifier.verify(decoded);
+
+        // 如果走到这里，说明验证成功（不可能发生）
+        std::cout << "JWT 验证成功\n";
+        std::cout << "uid = " << std::stoi(decoded.get_payload_claim("uid").as_string()) << "\n";
+
+    }
+    catch (const std::exception& e) {
+        // ======================
+        // 一定会走到这里！
+        // ======================
+        std::cout << "=========================================\n";
+        std::cout << "验证失败！Token 被篡改/伪造/无效！\n";
+        std::cout << "错误信息：" << e.what() << "\n";
+        std::cout << "=========================================\n";
+    }
+
+
+    try
+    {
+        pqxx::connection conn(
+            "dbname=3dGameDemo "
+            "user=postgres "
+            "password=123456 "
+            "host=127.0.0.1 "
+            "port=5432"
+        );
+
+        if (conn.is_open())
+        {
+            std::cout << "数据库连接成功！数据库名: " << conn.dbname() << std::endl;
+        }
+        else
+        {
+            std::cout << "数据库连接失败！" << std::endl;
+        }
+
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "异常: " << e.what() << std::endl;
+    }
+
 
     HttpsLoginServer httpsServer;
     thread httpsT(&HttpsLoginServer::Start, &httpsServer);

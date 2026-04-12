@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\Tool;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\game;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\network;D:\插件_工具\CPP\OpenSSL-Win64\include;D:\插件_工具\CPP\cpp-httplib-master;D:\插件_工具\CPP\json-3.12.0\include;D:\插件_工具\redis\hiredis-1.3.0;D:\插件_工具\boost_1_88_0;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\lib;D:\插件_工具\redis\hiredis-1.3.0\Build\Release;D:\插件_工具\boost_1_88_0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\插件_工具\CPP\jwt-cpp-v0.7.2\include;D:\Program Files\PostgreSQL\18\include;D:\插件_工具\CPP\libpqxx-8.0.1\build\include;D:\插件_工具\CPP\libpqxx-8.0.1\include;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\Tool;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\game;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\network;D:\插件_工具\CPP\OpenSSL-Win64\include;D:\插件_工具\CPP\cpp-httplib-master;D:\插件_工具\CPP\json-3.12.0\include;D:\插件_工具\redis\hiredis-1.3.0;D:\插件_工具\boost_1_88_0;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\PostgreSQL\18\lib;D:\插件_工具\CPP\libpqxx-8.0.1\build\src\Debug;E:\C++项目\c++3DGameServer\3DGameServer\3DGameServer\lib;D:\插件_工具\redis\hiredis-1.3.0\Build\Release;D:\插件_工具\boost_1_88_0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +113,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\插件_工具\redis\hiredis-1.3.0\Build\Release;D:\插件_工具\boost_1_88_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hiredis.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hiredis.lib;libssl.lib;libcrypto.lib;libpq.lib;pqxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
