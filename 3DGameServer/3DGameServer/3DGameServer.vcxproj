@@ -104,7 +104,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WIN32_WINNT=0x0A00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WIN32_WINNT=0x0A00;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -131,6 +131,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bcrypt\src\bcrypt.cpp" />
+    <ClCompile Include="Bcrypt\src\blowfish.cpp" />
     <ClCompile Include="game\GameWorld.cpp" />
     <ClCompile Include="game\GameWorldObject.cpp" />
     <ClCompile Include="main.cpp" />
@@ -139,6 +141,9 @@
     <ClCompile Include="Tool\RedisProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bcrypt\include\bcrypt.h" />
+    <ClInclude Include="Bcrypt\src\node_blf.h" />
+    <ClInclude Include="Bcrypt\src\openbsd.h" />
     <ClInclude Include="game\GameWorld.h" />
     <ClInclude Include="game\GameWorldObject.h" />
     <ClInclude Include="network\BoostService.h" />

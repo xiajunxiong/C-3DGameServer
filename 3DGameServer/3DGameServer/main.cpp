@@ -139,10 +139,16 @@ void addMap() {
 #include <fstream>
 #include <pqxx/pqxx>
 #include <jwt-cpp/jwt.h>
-
+#include "Bcrypt/include/bcrypt.h"
 
 int main() {
+    std::string password = "test123456";
 
+    std::string hashed = bcrypt::generateHash(password, 12);
+    std::cout << "加密后: " << hashed << std::endl;
+
+    bool ok = bcrypt::validatePassword(password, hashed);
+    std::cout << "验证结果: " << (ok ? "成功" : "失败") << std::endl;
     // ======================
     // 1. 正常生成正确的 Token（你可以忽略）
     // ======================

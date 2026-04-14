@@ -25,6 +25,9 @@
     <Filter Include="数据">
       <UniqueIdentifier>{3f853431-ae8b-4f01-aae5-b613b1ac54e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Bcrypt">
+      <UniqueIdentifier>{873264f8-8cae-425e-ab3d-681dd3f46847}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,6 +48,12 @@
     <ClCompile Include="Tool\RedisProcess.cpp">
       <Filter>工具</Filter>
     </ClCompile>
+    <ClCompile Include="Bcrypt\src\bcrypt.cpp">
+      <Filter>Bcrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="Bcrypt\src\blowfish.cpp">
+      <Filter>Bcrypt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RedisProcess.h">
@@ -64,6 +73,15 @@
     </ClInclude>
     <ClInclude Include="Tool\RedisProcess.h">
       <Filter>工具</Filter>
+    </ClInclude>
+    <ClInclude Include="Bcrypt\include\bcrypt.h">
+      <Filter>Bcrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="Bcrypt\src\node_blf.h">
+      <Filter>Bcrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="Bcrypt\src\openbsd.h">
+      <Filter>Bcrypt</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
