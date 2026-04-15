@@ -141,7 +141,13 @@ void addMap() {
 #include <jwt-cpp/jwt.h>
 #include "Bcrypt/include/bcrypt.h"
 
+
+
 int main() {
+    MessageRouter sessageRouter;
+    sessageRouter.Start();
+
+
     std::string password = "test123456";
 
     std::string hashed = bcrypt::generateHash(password, 12);

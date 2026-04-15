@@ -54,11 +54,11 @@
     <ClCompile Include="Bcrypt\src\blowfish.cpp">
       <Filter>Bcrypt</Filter>
     </ClCompile>
+    <ClCompile Include="Tool\MessageRouter.cpp">
+      <Filter>工具</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RedisProcess.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="network\HttpsLoginServer.h">
       <Filter>网络类</Filter>
     </ClInclude>
@@ -83,5 +83,16 @@
     <ClInclude Include="Bcrypt\src\openbsd.h">
       <Filter>Bcrypt</Filter>
     </ClInclude>
+    <ClInclude Include="network\Protocol.h">
+      <Filter>网络类</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\MessageRouter.h">
+      <Filter>工具</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\通讯协议.txt">
+      <Filter>资源文件</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -138,6 +138,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="network\BoostService.cpp" />
     <ClCompile Include="network\HttpsLoginServer.cpp" />
+    <ClCompile Include="Tool\MessageRouter.cpp" />
     <ClCompile Include="Tool\RedisProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,8 +149,12 @@
     <ClInclude Include="game\GameWorldObject.h" />
     <ClInclude Include="network\BoostService.h" />
     <ClInclude Include="network\HttpsLoginServer.h" />
-    <ClInclude Include="RedisProcess.h" />
+    <ClInclude Include="network\Protocol.h" />
+    <ClInclude Include="Tool\MessageRouter.h" />
     <ClInclude Include="Tool\RedisProcess.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\通讯协议.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
