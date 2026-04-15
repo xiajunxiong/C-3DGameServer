@@ -46,8 +46,6 @@ libboost*
 **/boost/
 
 # Redis 相关文件（不上传）
-redis*
-Redis*
 *redis*.exe
 *redis*.conf
 *redis*.log
