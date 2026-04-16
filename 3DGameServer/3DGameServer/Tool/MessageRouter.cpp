@@ -1,6 +1,7 @@
 #include "MessageRouter.h"
 #include <iostream>
 #include <HttpsLoginServer.h>
+#include <nlohmann/json.hpp>
 static MessageRouter g_GlobalRouter;
 
 void MessageRouter::Start()
@@ -38,21 +39,31 @@ void MessageRouter::RegisterPush(MsgID msgID, PushHandler handler)
 
 std::string MessageRouter::HandleResponse(const std::vector<uint8_t>& data)
 {
-    if (data.size() < sizeof(MsgHeader)) {
-        return R"({"code":400,"msg":"消息太短，无效"})";
+    if (data.empty()) {
+        return R"({"code":400,"msg":"数据为空"})";
     }
 
-    MsgHeader header{};
-    memcpy(&header, data.data(), sizeof(MsgHeader));
+    try
+    {
+        std::string jsonStr(data.begin(), data.end());
+        std::cout << "[Router] 收到 JSON: " << jsonStr << std::endl;
+        auto j = nlohmann::json::parse(jsonStr);
+        uint32_t msgIdValue = j.value("msgID", 0u);
+        MsgID msgID = static_cast<MsgID>(msgIdValue);
 
-    auto it = m_responseHandlers.find(header.msgID);
-    if (it != m_responseHandlers.end()) {
-        // 调用对应的 Response 处理函数
-        return it->second(data);
+        auto it = m_responseHandlers.find(msgID);
+        if (it != m_responseHandlers.end()) {
+            return it->second(data);
+        }
+        else {
+            std::cout << "[Router] 未注册的消息ID: " << msgIdValue << std::endl;
+            return R"({"code":404,"msg":"未注册的消息类型"})";
+        }
     }
-    else {
-        std::cout << "[MessageRouter] 未注册的 Response 消息ID: " << (uint32_t)header.msgID << std::endl;
-        return R"({"code":404,"msg":"未注册的消息类型"})";
+    catch (const std::exception& e)
+    {
+        std::cout << "[Router] JSON 解析失败: " << e.what() << std::endl;
+        return R"({"code":400,"msg":"JSON格式错误"})";
     }
 }
 

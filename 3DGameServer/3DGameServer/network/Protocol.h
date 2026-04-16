@@ -21,6 +21,12 @@ enum class MsgID : uint32_t
 
 };
 
+struct JsonMsgWrapper
+{
+    MsgID msgID;
+    // data 部分用 nlohmann::json 直接处理
+};
+
 struct MsgHeader
 {
     uint32_t length;

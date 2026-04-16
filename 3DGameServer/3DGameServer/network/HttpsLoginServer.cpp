@@ -1,7 +1,7 @@
 ﻿#include "HttpsLoginServer.h"
 #include <iostream>
 #include <fstream>
-
+#include <nlohmann/json.hpp>
 
 // 检查文件是否存在
 bool fileExists(const std::string& path) {
@@ -58,11 +58,57 @@ void HttpsLoginServer::Stop()
 
 std::string HttpsLoginServer::HandleLogin(const std::vector<uint8_t>& data)
 {
-    std::cout << "[Login] 收到登录请求，正在处理...\n";
+    try
+    {
+        // 1. 将二进制数据转为 string
+        std::string jsonStr(data.begin(), data.end());
+        std::cout << "[Login] 收到请求: " << jsonStr << std::endl;
 
-    // TODO: 写你的登录逻辑（解析数据、验证 Token、查数据库等）
+        // 2. 解析 JSON
+        auto j = nlohmann::json::parse(jsonStr);
 
-    return R"({"code":200,"msg":"登录成功","token":"jwt_token_12345"})";
+        std::string account = j.value("account", "");
+        std::string password = j.value("password", "");
+
+        if (account.empty() || password.empty())
+        {
+            return R"({"code":400,"msg":"账号或密码不能为空"})";
+        }
+
+        std::cout << "[Login] 账号: " << account << std::endl;
+
+        // TODO: 这里写你的真实登录逻辑（查数据库、验证密码等）
+        // 目前先模拟登录成功
+
+        // 模拟返回的玩家ID（你可以后面改成从数据库查询）
+        uint64_t playerId = 1000001;
+        std::string token = "jwt_token_" + account + "_abc123";
+
+        // 3. 构造返回的 JSON（重点修改在这里）
+        nlohmann::json response = {
+            {"code", 200},
+            {"msgID", static_cast<uint32_t>(MsgID::S2C_LoginSuccess)},
+            {"playerId", playerId},        // 你要求的 playerId
+            {"token", token},
+            {"nickname", account + "_player"},
+            {"level", 1}
+        };
+
+        std::string respStr = response.dump(4);   // 带缩进，方便调试
+        std::cout << "[Login] 返回响应:\n" << respStr << std::endl;
+
+        return respStr;
+    }
+    catch (const nlohmann::json::exception& e)
+    {
+        std::cout << "[Login] JSON 解析错误: " << e.what() << std::endl;
+        return R"({"code":400,"msg":"JSON格式错误"})";
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << "[Login] 处理异常: " << e.what() << std::endl;
+        return R"({"code":500,"msg":"服务器内部错误"})";
+    }
 }
 
 std::string HttpsLoginServer::HandleRegistration(const std::vector<uint8_t>& data)
