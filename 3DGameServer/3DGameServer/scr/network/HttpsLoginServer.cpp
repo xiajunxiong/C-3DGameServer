@@ -3,6 +3,9 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <network/Protocol.h>
+#include <data/pqxx/PqxxData.h>
+
+extern PqxxData pqxxdata;
 
 // 检查文件是否存在
 bool fileExists(const std::string& path) {
@@ -61,11 +64,10 @@ std::string HttpsLoginServer::HandleLogin(const std::vector<uint8_t>& data)
 {
     try
     {
-        // 1. 将二进制数据转为 string
+
         std::string jsonStr(data.begin(), data.end());
         std::cout << "[Login] 收到请求: " << jsonStr << std::endl;
 
-        // 2. 解析 JSON
         auto j = nlohmann::json::parse(jsonStr);
 
         std::string account = j.value("account", "");
@@ -75,28 +77,30 @@ std::string HttpsLoginServer::HandleLogin(const std::vector<uint8_t>& data)
         {
             return R"({"code":400,"msg":"账号或密码不能为空"})";
         }
+        std::string respStr;
+
+        std::string token = pqxxdata.Login(account, password);
+        if (token != "") {
+            nlohmann::json response = {
+                {"code", 200},
+                {"msgID", static_cast<uint32_t>(MsgID::S2C_LoginSuccess)},
+                {"gameServer", "127.0.0.1"},   
+                {"port", 12345},
+                {"token", token}
+            };
+            respStr = response.dump(4);
+        }
+        else
+        {
+            nlohmann::json response = {
+                {"code", 500},
+                {"msgID", static_cast<uint32_t>(MsgID::S2C_LoginFailed)},
+                {"msg", "account,password NO!"},
+            };
+            respStr = response.dump(4);
+        }
 
         std::cout << "[Login] 账号: " << account << std::endl;
-
-        // TODO: 这里写你的真实登录逻辑（查数据库、验证密码等）
-        // 目前先模拟登录成功
-
-        // 模拟返回的玩家ID（你可以后面改成从数据库查询）
-        uint64_t playerId = 1000001;
-        std::string token = "jwt_token_" + account + "_abc123";
-
-        // 3. 构造返回的 JSON（重点修改在这里）
-        nlohmann::json response = {
-            {"code", 200},
-            {"msgID", static_cast<uint32_t>(MsgID::S2C_LoginSuccess)},
-            {"playerId", playerId},        // 你要求的 playerId
-            {"token", token},
-            {"nickname", account + "_player"},
-            {"level", 1}
-        };
-
-        std::string respStr = response.dump(4);   // 带缩进，方便调试
-        std::cout << "[Login] 返回响应:\n" << respStr << std::endl;
 
         return respStr;
     }
@@ -114,7 +118,50 @@ std::string HttpsLoginServer::HandleLogin(const std::vector<uint8_t>& data)
 
 std::string HttpsLoginServer::HandleRegistration(const std::vector<uint8_t>& data)
 {
-    std::cout << "[Registration] 收到注册请求\n";
-    return R"({"code":200,"msg":"注册成功"})";
+    try
+    {
+    std::string jsonStr(data.begin(), data.end());
+    std::cout << "[Login] 收到请求: " << jsonStr << std::endl;
+
+    auto j = nlohmann::json::parse(jsonStr);
+
+    std::string username = j.value("username", "");
+    std::string account = j.value("account", "");
+    std::string password = j.value("password", "");
+
+    if (account.empty() || password.empty())
+    {
+        return R"({"code":400,"msg":"null"})";
+    }
+    std::string respStr;
+
+    int flag = pqxxdata.AddUser(username, account, password);
+    if (flag != 0) {
+        nlohmann::json response = {
+        {"code", 500},
+        {"msgID", static_cast<uint32_t>(MsgID::S2C_RegisterFailed)},
+        {"msg", "return: " + std::to_string(flag)},
+        };
+        respStr = response.dump(4);
+        return respStr;
+    }
+    nlohmann::json response = {
+    {"code", 200},
+    {"msgID", static_cast<uint32_t>(MsgID::S2C_RegisterSuccess)},
+    {"msg", "return: " + std::to_string(flag)},
+        };
+    respStr = response.dump(4);
+    return respStr;
+    }
+    catch (const nlohmann::json::exception& e)
+    {
+        std::cout << "[Registration] JSON 解析错误: " << e.what() << std::endl;
+        return R"({"code":400,"msg":"JSON格式错误"})";
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << "[Registration] 异常: " << e.what() << std::endl;
+        return R"({"code":500,"msg":"服务器内部错误"})";
+    }
 }
 

@@ -141,28 +141,29 @@ void addMap() {
 #include "bcrypt/bcrypt.h"
 #include "data/pqxx/PqxxData.h"
 #include <network/MessageRouter.h>
+PqxxData pqxxdata;
 int main() {
     MessageRouter sessageRouter; // 消息路由
     sessageRouter.Start();
-    PqxxData pqxx; // 数据库
-    pqxx.Start();
+    pqxxdata.Start();
 
 
-    std::string password = "test123456";
 
-    std::string hashed = bcrypt::generateHash(password, 12);
-    std::cout << "加密后: " << hashed << std::endl;
+    //std::string password = "test123456";
 
-    bool ok = bcrypt::validatePassword(password, hashed);
-    std::cout << "验证结果: " << (ok ? "成功" : "失败") << std::endl;
-    // ======================
-    // 1. 正常生成正确的 Token（你可以忽略）
-    // ======================
-    auto real_token = jwt::create()
-        .set_issuer("test")
-        .set_type("JWT")
-        .set_payload_claim("uid", jwt::claim(std::to_string(123456)))
-        .sign(jwt::algorithm::hs256{ "my-secret-key" });
+    //std::string hashed = bcrypt::generateHash(password, 12);
+    //std::cout << "加密后: " << hashed << std::endl;
+
+    //bool ok = bcrypt::validatePassword(password, hashed);
+    //std::cout << "验证结果: " << (ok ? "成功" : "失败") << std::endl;
+    //// ======================
+    //// 1. 正常生成正确的 Token（你可以忽略）
+    //// ======================
+    //auto real_token = jwt::create()
+    //    .set_issuer("test")
+    //    .set_type("JWT")
+    //    .set_payload_claim("uid", jwt::claim(std::to_string(123456)))
+    //    .sign(jwt::algorithm::hs256{ "my-secret-key" });
 
     //std::cout << "正确 Token：\n" << real_token << "\n\n";
 
@@ -176,31 +177,31 @@ int main() {
 
     //std::cout << "伪造 Token：\n" << fake_token << "\n\n";
 
-    try {
-        // 尝试解析 + 验证 伪造Token
-        auto decoded = jwt::decode(real_token);
+    //try {
+    //    // 尝试解析 + 验证 伪造Token
+    //    auto decoded = jwt::decode(real_token);
 
-        auto verifier = jwt::verify()
-            .allow_algorithm(jwt::algorithm::hs256{ "my-secret-key" })
-            .with_issuer("test");
+    //    auto verifier = jwt::verify()
+    //        .allow_algorithm(jwt::algorithm::hs256{ "my-secret-key" })
+    //        .with_issuer("test");
 
-        // 关键：验证伪造的token —— 一定会报错！
-        verifier.verify(decoded);
+    //    // 关键：验证伪造的token —— 一定会报错！
+    //    verifier.verify(decoded);
 
-        // 如果走到这里，说明验证成功（不可能发生）
-        std::cout << "JWT 验证成功\n";
-        std::cout << "uid = " << std::stoi(decoded.get_payload_claim("uid").as_string()) << "\n";
+    //    // 如果走到这里，说明验证成功（不可能发生）
+    //    std::cout << "JWT 验证成功\n";
+    //    std::cout << "uid = " << std::stoi(decoded.get_payload_claim("uid").as_string()) << "\n";
 
-    }
-    catch (const std::exception& e) {
-        // ======================
-        // 一定会走到这里！
-        // ======================
-        std::cout << "=========================================\n";
-        std::cout << "验证失败！Token 被篡改/伪造/无效！\n";
-        std::cout << "错误信息：" << e.what() << "\n";
-        std::cout << "=========================================\n";
-    }
+    //}
+    //catch (const std::exception& e) {
+    //    // ======================
+    //    // 一定会走到这里！
+    //    // ======================
+    //    std::cout << "=========================================\n";
+    //    std::cout << "验证失败！Token 被篡改/伪造/无效！\n";
+    //    std::cout << "错误信息：" << e.what() << "\n";
+    //    std::cout << "=========================================\n";
+    //}
 
 
     HttpsLoginServer httpsServer;
@@ -211,6 +212,23 @@ int main() {
 	runRedis();
 	//test_boost_install();
     
+    //std::cout << "\n=====================================\n";
+    //std::cout << "[模拟] 开始注册账号...\n";
+    //std::string reg_json = "{\"username\":\"playerhaha\",\"account\":\"test003\",\"password\":\"123456\"}";
+    //std::vector<uint8_t> reg_data(reg_json.begin(), reg_json.end());
+    //std::string reg_resp = httpsServer.HandleRegistration(reg_data);
+    //std::cout << "[注册结果] " << reg_resp << "\n";
+
+    //// ==============================================
+    //// ✅ 模拟：登录账号
+    //// ==============================================
+    //std::cout << "\n=====================================\n";
+    std::cout << "[模拟] 开始登录账号...\n";
+    std::string login_json = "{\"account\":\"test003\",\"password\":\"123456\"}";
+    std::vector<uint8_t> login_data(login_json.begin(), login_json.end());
+    std::string login_resp = httpsServer.HandleLogin(login_data);
+    std::cout << "[登录结果] " << login_resp << "\n";
+
     //Player* p1 = new Player();
     //p1->objId = "player_1001";  // 像数据库ID
     //world.Add(p1);

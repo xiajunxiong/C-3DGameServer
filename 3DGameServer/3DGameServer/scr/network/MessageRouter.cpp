@@ -16,6 +16,8 @@ void MessageRouter::Start()
     g_GlobalRouter.RegisterResponse(MsgID::C2S_RegisterRequest,
         &HttpsLoginServer::HandleRegistration);
 
+
+
     std::cout << "=== 所有消息注册完成 ===\n";
 
 

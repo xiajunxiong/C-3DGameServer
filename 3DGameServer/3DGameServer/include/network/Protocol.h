@@ -9,6 +9,8 @@ enum class MsgID : uint32_t
     C2S_RefreshToken = 10002,    // Refresh Token 请求
     C2S_RegisterRequest = 10003,    // 注册请求（账号+密码+昵称等）
     C2S_LogoutRequest = 10004,      // 退出登录请求
+    C2S_LoginWithToken = 10005,    // Token 自动登录（免账号密码）
+
 
     // 服务端 -> 客户端
     S2C_LoginSuccess = 10051,    // 登录成功
@@ -19,6 +21,8 @@ enum class MsgID : uint32_t
     S2C_InvalidParam = 10056,       // 注册/登录失败：参数格式错误
 
     S2C_LogoutSuccess = 10057,      // 退出登录成功
+    S2C_LoginWithTokenSuccess = 10058, // Token 登录成功
+    S2C_LoginWithTokenFailed = 10059, // Token 登录失败（过期/无效）
 
 };
 

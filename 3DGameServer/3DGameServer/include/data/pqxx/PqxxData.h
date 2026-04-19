@@ -20,9 +20,9 @@ struct User {
 	std::string username;
 	std::string password;
 	int status = 0; // 0 状态正常 1 被管理员封禁
-	std::chrono::system_clock::time_point create_time;// 注册创建不可改动
-	std::chrono::system_clock::time_point last_login_time;
-	std::chrono::system_clock::time_point offline_time;
+	std::string create_time; // 注册创建不可改动
+	std::string last_login_time;
+	std::string offline_time;
 };
 
 class PqxxData
@@ -30,10 +30,17 @@ class PqxxData
 public:
 	void Start();
 
+	std::string Login(const std::string& account, const std::string& password);
+
 	int AddUser(User user);
-	User QueryUser(int Account);
+	int AddUser(const std::string& username, const std::string& account, const std::string& password);
+	void UpdateLastLoginTime(const std::string& account);
+	User QueryUser(const std::string& account);
 private:
 
 	std::unique_ptr<pqxx::connection> conn;
+
+	std::string generateLoginToken(long long uid, const std::string& account);
+	long long verifyToken(const std::string& token);
 };
 
