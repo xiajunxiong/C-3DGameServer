@@ -38,8 +38,8 @@
  * Blowfish is an unpatented fast block cipher designed by
  * Bruce Schneier.
  */
+#include "bcrypt/node_blf.h"
 
-#include "node_blf.h"
 
 #undef inline
 #ifdef __GNUC__

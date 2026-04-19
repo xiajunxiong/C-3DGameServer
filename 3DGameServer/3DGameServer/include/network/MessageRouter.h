@@ -2,7 +2,7 @@
 #include <functional>
 #include <unordered_map>
 #include <string>
-#include "Protocol.h"
+#include "network/Protocol.h"
 
 
 class MessageRouter {

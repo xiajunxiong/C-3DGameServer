@@ -33,66 +33,78 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="network\HttpsLoginServer.cpp">
-      <Filter>网络类</Filter>
+    <ClCompile Include="scr\bcrypt\bcrypt.cpp">
+      <Filter>Bcrypt</Filter>
     </ClCompile>
-    <ClCompile Include="network\BoostService.cpp">
-      <Filter>网络类</Filter>
+    <ClCompile Include="scr\bcrypt\blowfish.cpp">
+      <Filter>Bcrypt</Filter>
     </ClCompile>
-    <ClCompile Include="game\GameWorldObject.cpp">
+    <ClCompile Include="scr\data\pqxx\PqxxData.CPP">
+      <Filter>数据</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\game\GameWorld.cpp">
       <Filter>游戏世界</Filter>
     </ClCompile>
-    <ClCompile Include="game\GameWorld.cpp">
+    <ClCompile Include="scr\game\GameWorldObject.cpp">
       <Filter>游戏世界</Filter>
     </ClCompile>
-    <ClCompile Include="Tool\RedisProcess.cpp">
-      <Filter>工具</Filter>
-    </ClCompile>
-    <ClCompile Include="Bcrypt\src\bcrypt.cpp">
-      <Filter>Bcrypt</Filter>
-    </ClCompile>
-    <ClCompile Include="Bcrypt\src\blowfish.cpp">
-      <Filter>Bcrypt</Filter>
-    </ClCompile>
-    <ClCompile Include="Tool\MessageRouter.cpp">
-      <Filter>工具</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="network\HttpsLoginServer.h">
+    <ClCompile Include="scr\network\BoostService.cpp">
       <Filter>网络类</Filter>
-    </ClInclude>
-    <ClInclude Include="network\BoostService.h">
+    </ClCompile>
+    <ClCompile Include="scr\network\HttpsLoginServer.cpp">
       <Filter>网络类</Filter>
-    </ClInclude>
-    <ClInclude Include="game\GameWorldObject.h">
-      <Filter>游戏世界</Filter>
-    </ClInclude>
-    <ClInclude Include="game\GameWorld.h">
-      <Filter>游戏世界</Filter>
-    </ClInclude>
-    <ClInclude Include="Tool\RedisProcess.h">
+    </ClCompile>
+    <ClCompile Include="scr\redis\RedisProcess.cpp">
       <Filter>工具</Filter>
-    </ClInclude>
-    <ClInclude Include="Bcrypt\include\bcrypt.h">
-      <Filter>Bcrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="Bcrypt\src\node_blf.h">
-      <Filter>Bcrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="Bcrypt\src\openbsd.h">
-      <Filter>Bcrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="network\Protocol.h">
+    </ClCompile>
+    <ClCompile Include="scr\time\Time.cpp">
+      <Filter>工具</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\network\MessageRouter.cpp">
       <Filter>网络类</Filter>
-    </ClInclude>
-    <ClInclude Include="Tool\MessageRouter.h">
-      <Filter>工具</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\通讯协议.txt">
       <Filter>资源文件</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\bcrypt\bcrypt.h">
+      <Filter>Bcrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bcrypt\node_blf.h">
+      <Filter>Bcrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bcrypt\openbsd.h">
+      <Filter>Bcrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\data\pqxx\PqxxData.h">
+      <Filter>数据</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\GameWorld.h">
+      <Filter>游戏世界</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\GameWorldObject.h">
+      <Filter>游戏世界</Filter>
+    </ClInclude>
+    <ClInclude Include="include\redis\RedisProcess.h">
+      <Filter>工具</Filter>
+    </ClInclude>
+    <ClInclude Include="include\time\Time.h">
+      <Filter>工具</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\HttpsLoginServer.h">
+      <Filter>网络类</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\BoostService.h">
+      <Filter>网络类</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\Protocol.h">
+      <Filter>网络类</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\MessageRouter.h">
+      <Filter>网络类</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

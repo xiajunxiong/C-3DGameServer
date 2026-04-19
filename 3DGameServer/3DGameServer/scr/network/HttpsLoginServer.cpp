@@ -1,7 +1,8 @@
-﻿#include "HttpsLoginServer.h"
+﻿#include "network/HttpsLoginServer.h"
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <network/Protocol.h>
 
 // 检查文件是否存在
 bool fileExists(const std::string& path) {

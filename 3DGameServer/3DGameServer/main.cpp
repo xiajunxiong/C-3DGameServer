@@ -7,11 +7,11 @@
 #include <libs/date_time/src/gregorian/gregorian_types.cpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <hiredis.h>
-#include "GameWorld.h"
+#include "game/GameWorld.h"
 #include <chrono>
 #include <vector>
-#include "GameWorldObject.h"
-#include "BoostService.h"
+#include "game/GameWorldObject.h"
+#include "network/BoostService.h"
 #include <thread>
 
 
@@ -58,7 +58,7 @@ void runGameLoop() {
     }
 }
 
-#include "RedisProcess.h"
+#include "redis/RedisProcess.h"
 
 void runRedis() {
     RedisProcess::Start();
@@ -135,17 +135,17 @@ void addMap() {
     p1->objId = "player_1005";  // 像数据库ID
     world.Add(p1);
 }
-#include "HttpsLoginServer.h"
+#include "network/HttpsLoginServer.h"
 #include <fstream>
-#include <pqxx/pqxx>
 #include <jwt-cpp/jwt.h>
-#include "Bcrypt/include/bcrypt.h"
-
-
-
+#include "bcrypt/bcrypt.h"
+#include "data/pqxx/PqxxData.h"
+#include <network/MessageRouter.h>
 int main() {
-    MessageRouter sessageRouter;
+    MessageRouter sessageRouter; // 消息路由
     sessageRouter.Start();
+    PqxxData pqxx; // 数据库
+    pqxx.Start();
 
 
     std::string password = "test123456";
@@ -200,32 +200,6 @@ int main() {
         std::cout << "验证失败！Token 被篡改/伪造/无效！\n";
         std::cout << "错误信息：" << e.what() << "\n";
         std::cout << "=========================================\n";
-    }
-
-
-    try
-    {
-        pqxx::connection conn(
-            "dbname=3dGameDemo "
-            "user=postgres "
-            "password=123456 "
-            "host=127.0.0.1 "
-            "port=5432"
-        );
-
-        if (conn.is_open())
-        {
-            std::cout << "数据库连接成功！数据库名: " << conn.dbname() << std::endl;
-        }
-        else
-        {
-            std::cout << "数据库连接失败！" << std::endl;
-        }
-
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << "异常: " << e.what() << std::endl;
     }
 
 
