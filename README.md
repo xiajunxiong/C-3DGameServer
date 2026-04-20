@@ -6,6 +6,3 @@ redis 3.0
 
 # 登录模块架构
 ![登录流程图](3DGameServer/Image/登录流程图.png)
-<p align="center">
-  <img src="3DGameServer/Image/登录流程图.png" width="600">
-</p>
