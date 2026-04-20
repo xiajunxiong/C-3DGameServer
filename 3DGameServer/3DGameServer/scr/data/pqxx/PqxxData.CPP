@@ -69,6 +69,10 @@ int PqxxData::AddUser(User user)
 
         return 0;
     }
+    catch (const pqxx::unique_violation& e) {
+        std::cerr << "[DB] 账号已存在: " << user.account << std::endl;
+        return 1; 
+    }
     catch (const std::exception& e) {
         std::cerr << "[DB] 添加用户失败: " << e.what() << std::endl;
         return -1;
