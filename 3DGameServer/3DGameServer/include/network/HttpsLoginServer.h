@@ -14,7 +14,10 @@ public:
     void Stop();
     static std::string HandleLogin(const std::vector<uint8_t>& data);
     static std::string HandleRegistration(const std::vector<uint8_t>& data);
+    static std::string HandleTokenLogin(const std::vector<uint8_t>& data);
 private:
     httplib::SSLServer* svr = nullptr;
     MessageRouter router;
+    static std::string  generateLoginToken(const std::string& uid, const std::string& account);
+    static long long verifyToken(const std::string& token);
 };

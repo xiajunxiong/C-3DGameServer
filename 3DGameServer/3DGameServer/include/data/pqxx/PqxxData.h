@@ -30,17 +30,15 @@ class PqxxData
 public:
 	void Start();
 
-	std::string Login(const std::string& account, const std::string& password);
+	User Login(const std::string& account, const std::string& password);
 
 	int AddUser(User user);
 	int AddUser(const std::string& username, const std::string& account, const std::string& password);
 	void UpdateLastLoginTime(const std::string& account);
+	void UpdateLoginTime(const std::string& uid);
 	User QueryUser(const std::string& account);
 private:
 
 	std::unique_ptr<pqxx::connection> conn;
-
-	std::string generateLoginToken(long long uid, const std::string& account);
-	long long verifyToken(const std::string& token);
 };
 

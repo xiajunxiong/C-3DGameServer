@@ -100,10 +100,10 @@
     <ClInclude Include="include\network\BoostService.h">
       <Filter>网络类</Filter>
     </ClInclude>
-    <ClInclude Include="include\network\Protocol.h">
+    <ClInclude Include="include\network\MessageRouter.h">
       <Filter>网络类</Filter>
     </ClInclude>
-    <ClInclude Include="include\network\MessageRouter.h">
+    <ClInclude Include="include\network\Protocol.h">
       <Filter>网络类</Filter>
     </ClInclude>
   </ItemGroup>

@@ -23,7 +23,7 @@ enum class MsgID : uint32_t
     S2C_LogoutSuccess = 10057,      // 退出登录成功
     S2C_LoginWithTokenSuccess = 10058, // Token 登录成功
     S2C_LoginWithTokenFailed = 10059, // Token 登录失败（过期/无效）
-
+    S2C_AccountBanned = 10060, // 账号被封禁（你要的）
 };
 
 

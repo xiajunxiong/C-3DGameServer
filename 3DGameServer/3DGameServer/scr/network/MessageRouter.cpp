@@ -9,12 +9,12 @@ void MessageRouter::Start()
     std::cout << "=== ¿ªÊ¼×¢²áËùÓĞÏûÏ¢´¦Àíº¯Êı ===\n";
 
 
-    // µÇÂ¼
-    g_GlobalRouter.RegisterResponse(MsgID::C2S_LoginRequest,
-        &HttpsLoginServer::HandleLogin);
+    // ÕËºÅµÇÂ¼
+    g_GlobalRouter.RegisterResponse(MsgID::C2S_LoginRequest, &HttpsLoginServer::HandleLogin);
+    // tokenµÇÂ¼
+    g_GlobalRouter.RegisterResponse(MsgID::C2S_LoginWithToken, &HttpsLoginServer::HandleTokenLogin);
     // ×¢²á
-    g_GlobalRouter.RegisterResponse(MsgID::C2S_RegisterRequest,
-        &HttpsLoginServer::HandleRegistration);
+    g_GlobalRouter.RegisterResponse(MsgID::C2S_RegisterRequest, &HttpsLoginServer::HandleRegistration);
 
 
 

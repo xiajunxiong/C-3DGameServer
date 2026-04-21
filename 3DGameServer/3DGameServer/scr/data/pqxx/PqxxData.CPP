@@ -30,18 +30,19 @@ void PqxxData::Start() {
     }
 }
 
-std::string PqxxData::Login(const std::string& account, const std::string& password)
+User PqxxData::Login(const std::string& account, const std::string& password)
 {
     User user = QueryUser(account);
-    if (user.uid == 0) return "";
+    //if (user.uid == 0) return "";
 
-    if (!bcrypt::validatePassword(password, user.password)) {
-        std::cout << "[登录] 密码错误\n";
-        return "";
-    }
+    //if (!bcrypt::validatePassword(password, user.password)) {
+    //    std::cout << "[登录] 密码错误\n";
+    //    return "";
+    //}
 
-    UpdateLastLoginTime(account);
-    return generateLoginToken(user.uid, user.account);
+    //UpdateLastLoginTime(account);
+    //return generateLoginToken(user.uid, user.account);
+    return user;
 }
 
 int PqxxData::AddUser(User user)
@@ -56,7 +57,7 @@ int PqxxData::AddUser(User user)
         tx.exec(
             "INSERT INTO \"user\".player_login (account, password, username, status) "
             "VALUES ($1, $2, $3, $4)",
-            pqxx::params{
+            pqxx::params{ 
                 user.account,
                 hashed,
                 user.username,
@@ -105,6 +106,21 @@ void PqxxData::UpdateLastLoginTime(const std::string& account)
     catch (...) {}
 }
 
+void PqxxData::UpdateLoginTime(const std::string& uid)
+{
+    if (!conn) return;
+
+    try {
+        pqxx::work tx(*conn);
+        tx.exec(
+            "UPDATE \"user\".player_login SET last_login_time = now() WHERE uid = $1",
+            pqxx::params{ uid }
+        );
+        tx.commit();
+    }
+    catch (...) {}
+}
+
 User PqxxData::QueryUser(const std::string& account)
 {
     if (!conn) return {};
@@ -136,46 +152,5 @@ User PqxxData::QueryUser(const std::string& account)
     catch (const std::exception& e) {
         std::cerr << "[DB] 查询失败: " << e.what() << std::endl;
         return {};
-    }
-}
-
-
-
-std::string PqxxData::generateLoginToken(long long uid, const std::string& account)
-{
-    auto expire = std::chrono::system_clock::now() + std::chrono::hours(24);
-    auto expire_time = std::chrono::duration_cast<std::chrono::seconds>(expire.time_since_epoch()).count();
-
-    std::string token = jwt::create()
-        .set_issuer("game_server")
-        .set_payload_claim("exp", jwt::claim(std::to_string(expire_time)))
-        .set_payload_claim("uid", jwt::claim(std::to_string(uid)))
-        .set_payload_claim("account", jwt::claim(account))
-        .sign(jwt::algorithm::hs256{ "431982283@qq.com" });
-
-    return token;
-}
-
-long long PqxxData::verifyToken(const std::string& token)
-{
-    try
-    {
-
-        auto decoded = jwt::decode(token);
-
-        auto verifier = jwt::verify()
-            .allow_algorithm(jwt::algorithm::hs256{ "431982283@qq.com" })  // 密钥必须和生成时一致
-            .with_issuer("game_server");                                       // 签发者一致
-
-        verifier.verify(decoded);
-
-        // 4. 校验成功 → 取出 uid
-        std::string uid_str = decoded.get_payload_claim("uid").as_string();
-        return std::stoll(uid_str); // 转成 long long 并返回
-    }
-    catch (const std::exception& e)
-    {
-        std::cout << "[Token 校验失败] " << e.what() << std::endl;
-        return -1; // 失败返回 -1
     }
 }

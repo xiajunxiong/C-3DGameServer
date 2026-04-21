@@ -60,46 +60,6 @@ void runGameLoop() {
 
 #include "redis/RedisProcess.h"
 
-void runRedis() {
-    RedisProcess::Start();
-    Sleep(500);
-
-    redisContext* ctx = redisConnect("127.0.0.1", 6379);
-
-    if (ctx == nullptr || ctx->err != 0)
-    {
-        std::cout << "连接失败：" << (ctx ? ctx->errstr : "未知错误") << std::endl;
-        if (ctx != nullptr)
-        {
-            redisFree(ctx);
-        }
-        return;
-    }
-    std::cout << "Redis 连接成功！" << std::endl;
-
-    redisReply* reply = (redisReply*)redisCommand(ctx, "SET test hello");
-    if (reply == nullptr)
-    {
-        std::cout << "SET 命令执行失败" << std::endl;
-        redisFree(ctx);
-        return;
-    }
-    freeReplyObject(reply);
-
-    reply = (redisReply*)redisCommand(ctx, "GET test");
-    if (reply != nullptr && reply->type == REDIS_REPLY_STRING)
-    {
-        std::cout << "读取结果：" << reply->str << std::endl;
-    }
-    else
-    {
-        std::cout << "GET 命令执行失败 / 数据类型错误" << std::endl;
-    }
-    freeReplyObject(reply);
-
-    redisFree(ctx);
-    std::cout << "Redis 操作完成" << std::endl;
-}
 
 //void test_boost_install() {
 //	boost::timer t;
@@ -141,6 +101,7 @@ void addMap() {
 #include "bcrypt/bcrypt.h"
 #include "data/pqxx/PqxxData.h"
 #include <network/MessageRouter.h>
+#include <nlohmann/json.hpp>
 PqxxData pqxxdata;
 int main() {
     MessageRouter sessageRouter; // 消息路由
@@ -207,9 +168,10 @@ int main() {
     HttpsLoginServer httpsServer;
     thread httpsT(&HttpsLoginServer::Start, &httpsServer);
     httpsT.detach();
+    RedisProcess::Instance().Start();
 	startServer();
 	startGame();
-	runRedis();
+	//runRedis();
 	//test_boost_install();
     
     //std::cout << "\n=====================================\n";
@@ -222,12 +184,30 @@ int main() {
     //// ==============================================
     //// ✅ 模拟：登录账号
     //// ==============================================
-    //std::cout << "\n=====================================\n";
+    std::cout << "\n=====================================\n";
     std::cout << "[模拟] 开始登录账号...\n";
     std::string login_json = "{\"account\":\"test003\",\"password\":\"123456\"}";
     std::vector<uint8_t> login_data(login_json.begin(), login_json.end());
     std::string login_resp = httpsServer.HandleLogin(login_data);
     std::cout << "[登录结果] " << login_resp << "\n";
+
+    //std::cout << "\n=====================================\n";
+    //std::cout << "[模拟] 开始 Token 登录...\n";
+
+
+    //// 1. 从登录结果里解析出 token
+    //nlohmann::json login_result = nlohmann::json::parse(login_resp);
+    //std::string token = login_result["token"];
+
+    //// 2. 构造 Token 登录的 JSON
+    //std::string token_login_json = "{\"token\":\"" + token + "\"}";
+    //std::vector<uint8_t> token_login_data(token_login_json.begin(), token_login_json.end());
+
+    //// 3. 调用 Token 登录接口
+    //std::string token_login_resp = httpsServer.HandleTokenLogin(token_login_data);
+
+    //// 4. 输出结果
+    //std::cout << "[Token 登录结果] " << token_login_resp << "\n";
 
     //Player* p1 = new Player();
     //p1->objId = "player_1001";  // 像数据库ID
@@ -251,7 +231,7 @@ int main() {
 
 
 
-    RedisProcess::Stop();
+    RedisProcess::Instance().Stop();
 	return 0;
 }
 
