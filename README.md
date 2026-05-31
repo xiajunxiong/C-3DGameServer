@@ -1,3 +1,5 @@
+客户端地址 https://github.com/xiajunxiong/3DGameClient
+
 基于Boost、PostgreSQL、Redis 实现的3D游戏服务端
 c++ 20
 PostgreSQL 18.3_x64
